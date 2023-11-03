@@ -54,6 +54,8 @@ const EXPAND_ELEMENT_CLASSNAME = 'ant-typography-expand';
   `,
   exportAs: 'nzTypography',
   template: `
+    {{ isEllipsis }}
+    {{ expanded }}
     <ng-template #contentTemplate let-content="content">
       <ng-content *ngIf="!content"></ng-content>
       {{ content }}
@@ -68,10 +70,18 @@ const EXPAND_ELEMENT_CLASSNAME = 'ant-typography-expand';
           else jsEllipsis
         "
       >
-        <ng-template
-          [ngTemplateOutlet]="contentTemplate"
-          [ngTemplateOutletContext]="{ content: nzContent }"
-        ></ng-template>
+        <!--        <span *ngIf="nzTooltipTitle" class="ant-form-item-tooltip" nz-tooltip [nzTooltipTitle]="nzTooltipTitle">-->
+        <!--          <ng-container *nzStringTemplateOutlet="tooltipIcon.type; let tooltipIconType">-->
+        <!--            <span nz-icon [nzType]="tooltipIconType" [nzTheme]="tooltipIcon.theme"></span>-->
+        <!--          </ng-container>-->
+        <!--        </span>-->
+        <span nz-tooltip nzTooltipTitle="nzTooltipTitle">
+          {{ nzEllipsisTooltip }}
+          <ng-template
+            [ngTemplateOutlet]="contentTemplate"
+            [ngTemplateOutletContext]="{ content: nzContent }"
+          ></ng-template>
+        </span>
         <ng-container *ngIf="nzSuffix">{{ nzSuffix }}</ng-container>
       </ng-container>
       <ng-template #jsEllipsis>
@@ -141,6 +151,7 @@ export class NzTypographyComponent implements OnInit, AfterViewInit, OnDestroy, 
   @Input() @WithConfig() nzEditIcon: NzTSType = 'edit';
   @Input() nzContent?: string;
   @Input() @WithConfig() @InputNumber() nzEllipsisRows: number = 1;
+  @Input() @WithConfig() nzEllipsisTooltip?: null | NzTSType = undefined;
   @Input() nzType: 'secondary' | 'warning' | 'danger' | 'success' | undefined;
   @Input() nzCopyText: string | undefined;
   @Input() nzSuffix: string | undefined;

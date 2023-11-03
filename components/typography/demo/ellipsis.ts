@@ -36,7 +36,18 @@ import { Component } from '@angular/core';
       [nzContent]="dynamicContent"
       (nzContentChange)="onChange($event)"
     ></p>
-  `
+    <br />
+    <span nz-text nzEllipsis nzEllipsisTooltip="*">
+      Ant Design, a design language for background applications, is refined by Ant UED Team.
+    </span>
+  `,
+  styles: [
+    `
+      span[nzEllipsisTooltip] {
+        width: 100px;
+      }
+    `
+  ]
 })
 export class NzDemoTypographyEllipsisComponent {
   dynamicContent =
