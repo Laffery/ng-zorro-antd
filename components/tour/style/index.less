@@ -1,0 +1,129 @@
+@import '../../style/themes/index';
+@import '../../style/mixins/index';
+
+@tour-prefix-cls: ~'@{ant-prefix}-tour';
+
+@tour-border-radius: @border-radius-base;
+@tour-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+@tour-padding: 16px;
+@tour-padding-xs: 8px;
+@tour-close-size: 22px;
+
+// Base class
+.@{tour-prefix-cls} {
+  .reset-component();
+  background-color: black;
+
+  position: absolute;
+  z-index: 1001;
+  display: block;
+  width: 520px;
+  visibility: visible;
+
+
+  &-content {
+    position: relative;
+  }
+
+  &-inner {
+    text-align: start;
+    text-decoration: none;
+    border-radius: @tour-border-radius;
+    boxShadow: @tour-box-shadow;
+    position: relative;
+    background-color: @component-background;
+    border: none;
+    background-clip: padding-box;
+  }
+
+  &-close {
+    position: absolute;
+    top: @tour-padding;
+    inset-inline-end: @tour-padding;
+    outline: none;
+    height: @tour-close-size;
+    width: @tour-close-size;
+    border-radius: @border-radius-sm;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-cover {
+
+  }
+
+  &-header {
+    padding: @tour-padding @tour-padding @tour-padding-xs;
+  }
+
+  &-title {
+    line-height: @line-height-base;
+    font-size: @font-size-base;
+    font-weight: 600;
+  }
+
+  &-description {
+    padding: 0 @tour-padding;
+    line-height: @line-height-base;
+    word-wrap: break-word;
+  }
+
+  &-footer {
+    padding: @tour-padding-xs @tour-padding @tour-padding;
+    text-align: end;
+    border-radius: 0 0 @border-radius-sm @border-radius-sm;
+    display: flex;
+  }
+
+  &-indicators {
+    display: inline-block;
+  }
+
+  &-indicator {
+    @tour-indicator-size: 8px;
+    width: @tour-indicator-size;
+    height: @tour-indicator-size;
+    display: inline-block;
+    border-radius: 50%;
+    background: white;
+
+    &:not(:last-child) {
+      margin-inline-end: @tour-indicator-size;
+    }
+
+    &-active {
+      background: @primary-color;
+    }
+  }
+
+  &-buttons {
+    margin-inline-start: auto;
+
+    & > button {
+      margin-inline-start: @margin-xs;
+    }
+  }
+}
+
+.generator-tour-preset-color(@i: length(@preset-colors)) when (@i > 0) {
+  .generator-tour-preset-color(@i - 1);
+  @color: extract(@preset-colors, @i);
+  @lightColor: '@{color}-6';
+  .@{tour-prefix-cls}-@{color} {
+    .@{tour-prefix-cls}-inner {
+      background-color: @@lightColor;
+    }
+
+    .@{tour-prefix-cls}-arrow {
+      &-content::before {
+        background: @@lightColor;
+      }
+    }
+  }
+}
+
+.generator-tour-preset-color();
+
+@import './rtl';

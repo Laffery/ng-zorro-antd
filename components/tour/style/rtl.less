@@ -1,0 +1,14 @@
+@tour-prefix-cls: ~'@{ant-prefix}-tour';
+
+// Base class
+.@{tour-prefix-cls} {
+  &-rtl {
+    direction: rtl;
+  }
+  // Wrapper for the tooltip content
+  &-inner {
+    .@{tour-prefix-cls}-rtl & {
+      text-align: right;
+    }
+  }
+}

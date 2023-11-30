@@ -63,6 +63,7 @@ export interface NzConfig {
   table?: TableConfig;
   tabs?: TabsConfig;
   timePicker?: TimePickerConfig;
+  tour?: TourConfig;
   tree?: TreeConfig;
   treeSelect?: TreeSelectConfig;
   typography?: TypographyConfig;
@@ -323,6 +324,10 @@ export interface TimePickerConfig {
   nzUse12Hours?: string;
   nzSuffixIcon?: string | TemplateRef<NzSafeAny>;
   nzBackdrop?: boolean;
+}
+
+export interface TourConfig {
+  nzMask: boolean;
 }
 
 export interface TreeConfig {
