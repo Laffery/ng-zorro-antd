@@ -13,7 +13,7 @@ Replace `BrowserAnimationsModule` with `NoopAnimationsModule` in the module.
 ```ts
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     provideNoopAnimations()
@@ -74,7 +74,7 @@ Instead, you can use `provideNzWave` or use `NoopAnimationsModule` to turn off t
 ```ts
 import { provideNzWave } from 'ng-zorro-antd/core/wave';
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideNzWave({ disabled: true })
   ]

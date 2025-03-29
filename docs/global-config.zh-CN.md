@@ -18,7 +18,7 @@ const ngZorroConfig: NzConfig = {
   notification: { nzTop: 240 }
 };
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideNzConfig(ngZorroConfig)
   ]
@@ -78,7 +78,7 @@ const nzConfigFactory = (): NzConfig => {
   };
 };
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     { // The FactoryProvider
       provide: NZ_CONFIG,

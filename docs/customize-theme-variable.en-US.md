@@ -36,7 +36,7 @@ const ngZorroConfig: NzConfig = {
   }
 };
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideNzConfig(ngZorroConfig)
   ]

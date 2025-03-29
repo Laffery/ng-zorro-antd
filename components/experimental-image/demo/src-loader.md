@@ -25,7 +25,7 @@ const nzConfig: NzConfig = {
   }
 };
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideNzConfig(nzConfig)
   ]
@@ -52,7 +52,7 @@ const nzConfig: NzConfig = {
   }
 };
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
     provideNzConfig(nzConfig)
   ]

@@ -85,7 +85,7 @@ const icons: IconDefinition[] = [ AccountBookFill, AlertOutline, AlertFill ];
 // };
 // const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
-export const appConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [provideNzIcons(icons)]
 }
 ```
