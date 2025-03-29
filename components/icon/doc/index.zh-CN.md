@@ -28,7 +28,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 | `[nzSpin]`         | 是否有旋转动画                               | `boolean`                    | `false`     |
 | `[nzTwotoneColor]` | 仅适用双色图标，设置双色图标的主要颜色，默认为 Ant Design 蓝色 | `string (十六进制颜色)`            | -           | ✅      |
 | `[nzIconfont]`     | 指定来自 IconFont 的图标类型                   | string                       | -           |
-| `[nzRotate]`       | 图标旋转角度（7.0.0 开始支持）                    | `number`                     | -           |
+| `[nzRotate]`       | 图标旋转角度                                | `number`                     | -           |
 
 ### NzIconService
 
@@ -37,36 +37,29 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 | `addIcon()`            | 用于静态引入图标，可传入多个值（或者用数组解构赋值）                      | `IconDefinition`         |
 | `addIconLiteral()`     | 用于静态引入用户自定义图标                                   | `string`, `string (SVG)` |
 | `fetchFromIconfont()`  | 用于从 IconFont 获取图标资源文件                           | `NzIconfontOption`       |
-| `changeAssetsSource()` | 用于修改动态加载 icon 的资源前缀，使得你可以部署图标资源到你想要的任何位置，例如 cdn | `string`                 |
+| `changeAssetsSource()` | 用于修改动态加载 icon 的资源前缀，使得你可以部署图标资源到你想要的任何位置，例如 CDN | `string`                 |
 
 ### SVG 图标
 
-我们与 Ant Design 同步，使用了 svg 图标替换了原先的 font 图标，从而带来了以下优势：
+最早 NG-ZORRO 采用基于字体文件的解决方案。
+现在我们与 Ant Design 同步，使用 svg 图标替换了原先的 font 图标，从而带来以下优势：
 
-- 完全离线化使用，不需要从支付宝 cdn 下载字体文件，图标不会因为网络问题呈现方块，同时还支持本地部署。
+- 完全离线化使用，不需要从 CDN 下载字体文件，图标不会因为网络问题呈现方块，同时还支持本地部署。
 - 在低端设备上 SVG 有更好的清晰度。
 - 支持多色图标。
-- 对于内建图标的更换可以提供更多 API，而不需要进行样式覆盖。
+- 对于内建图标的更换可以提供更多 API，而无需样式覆盖。
 
-可参与 Ant Design 的相关讨论：[#10353](https://github.com/ant-design/ant-design/issues/10353)。
-
-NG-ZORRO 之前并没有图标组件，而是提供了基于字体文件的解决方案。新版本中我们提供了旧 API 兼容，如果你不修改既有的代码，所有的图标都会被动态加载成 `outline` 主题的图标，而最佳实践是使用新的组件 `nz-icon` 并传入 `theme` 以明确图标的主题风格，例如：
+你可以使用 `nz-icon` 组件，指定图标 `type` 并传入 `theme` 以明确图标的主题风格，例如：
 
 ```html
 <nz-icon nzType="star" nzTheme="fill" />
-```
-
-所有的图标都会以 `<svg>` 标签渲染，但是你还是可以用之前对 i 标签设置的样式和类来控制 svg 的样式，例如：
-
-```html
-<nz-icon nzType="message" style="font-size: 16px; color: #08c;" />
 ```
 
 ### 静态加载与动态加载
 
 对于 Ant Design 提供的图标，我们提供了两种方式来加载图标资源文件。
 
-静态加载，可以在 `app.config.ts` 中使用 `provideNzIcons` 引入你需要的图标（推荐）或者是全部的图标，例如：
+**静态加载**，可以在 `app.config.ts` 中使用 `provideNzIcons` 引入你需要的图标（推荐）或者是全部的图标，例如：
 
 ```typescript
 import { IconDefinition } from '@ant-design/icons-angular';
@@ -94,7 +87,7 @@ export const appConfig: ApplicationConfig = {
 
 > 为了加快渲染速度，NG-ZORRO 本身用到的 icon 是静态引入的。而官网的图标是动态引入的。
 
-动态加载，这是为了减少包体积而提供的方式。当 NG-ZORRO 检测用户想要渲染的图标还没有静态引入时，会发起 HTTP 请求动态引入。你只需要配置 `angular.json` 文件：
+**动态加载**，这是为了减少包体积而提供的方式。当 NG-ZORRO 检测用户想要渲染的图标还没有静态引入时，会发起 HTTP 请求动态引入。你只需要配置 `angular.json` 文件：
 
 ```json
 {
@@ -108,7 +101,7 @@ export const appConfig: ApplicationConfig = {
 }
 ```
 
-你可以通过 `NzIconService` 的 `changeAssetsSource()` 方法来修改图标资源的位置，这样你就可以部署这些资源到 cdn 上。你的参数会被直接添加到 `assets/` 的前面。
+你可以通过 `NzIconService` 的 `changeAssetsSource()` 方法来修改图标资源的位置，这样你就可以部署这些资源到 CDN 上。你的参数会被直接添加到 `assets/` 的前面。
 
 例如，你在 `https://mycdn.somecdn.com/icons/assets` 目录下部署了静态资源文件，那么你就可以通过调用 `changeAssetsSource('https://mycdn.somecdn.com/icons')`，来告诉 NG-ZORRO 从这个位置动态加载图标资源。
 
@@ -116,7 +109,7 @@ export const appConfig: ApplicationConfig = {
 
 ### 在子模块中补充图标
 
-有时候，为了避免增大 main.js 的体积，你可能想要懒加载的组件中或路由的 `providers` 中使用 `provideNzIconsPatch` 来补充图标
+有时候，为了避免增大 main.js 的体积，你可能想要在懒加载的组件中或路由的 `providers` 中使用 `provideNzIconsPatch` 来补充图标
 
 ```typescript
 import { NzIconModule, provideNzIconsPatch } from 'ng-zorro-antd/icon';
@@ -135,7 +128,7 @@ const routes: Routes = [{
 }]
 ```
 
-这样，当 `ChildModule` 加载之后，整个应用都能够使用 QuestionOutline 图标。
+这样，当 QuestionOutline 图标加载之后，整个应用都能够使用它。
 
 当然，不要忘记在 `NZ_ICONS` 中删除该图标。
 
@@ -145,7 +138,7 @@ const routes: Routes = [{
 
 ### 自定义 font 图标
 
-我们提供了一个 `fetchFromIconfont` 方法，方便开发者调用在 [iconfont.cn](http://iconfont.cn/) 上自行管理的图标。
+我们提供了 `fetchFromIconfont` 方法，方便开发者调用在 [iconfont.cn](http://iconfont.cn/) 上自行管理的图标。
 
 ```typescript
 this._iconService.fetchFromIconfont({
@@ -190,17 +183,17 @@ this._iconService.fetchFromIconfont({
 ```typescript
 import * as AllIcons from '@ant-design/icons-angular/icons';
 
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
+const antDesignIcons = AllIcons as Record<string, IconDefinition>;
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 ```
 
-然后通过 forRoot 或者 `NzIconService` 的 `addIcon` 方法引入。
+然后通过 `provideNzIcons` 或者 `NzIconService` 的 `addIcon` 方法引入。
 
 ### 动态加载会不会影响网页的性能？
 
-我们用了多种手段来尽量减少动态请求，包括先静态后动态、缓存和相同 icon 的请求复用，用户很少能感知到 icon 是异步加载的。在网络环境尚可的情况下，即使是有三百多 icon 同时展示的 NG-ZORRO 官网，也基本没有卡顿。对于加载速度要求更高的用户，我们也支持 CDN。
+我们用了多种手段来尽量减少动态请求，包括先静态后动态、缓存和相同 icon 的请求复用，用户很少能感知到 icon 是异步加载的。
+在网络环境尚可的情况下，即使是有三百多个 icon 同时展示的 NG-ZORRO 官网，也基本没有卡顿。
+对于加载速度要求更高的用户，我们也支持 CDN。
 
 ### 我怎么知道一个 icon 的静态引入名？
 

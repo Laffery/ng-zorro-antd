@@ -40,27 +40,20 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 ### SVG icons
 
+NG-ZORRO used to provide an icon component.
 We synced to Ant Design and replaced font icons with svg icons which bring benefits below:
 
-- Complete offline usage of icon, no dependency of alipay cdn font icon file and no more empty square during downloading.
+- Complete offline usage of icon, no dependency of CDN font icon file and no more empty square during downloading.
 - Much more display accuracy in lower-level screens.
 - Support multiple colors for icon.
 - No need to change built-in icons with overriding styles by providing more props in component.
 
 You can join in [this discussion of Ant Design](https://github.com/ant-design/ant-design/issues/10353).
 
-NG-ZORRO hadn't provided an icon component at the beginning. Instead, icon based on font files was provided.
-We make this new directive compatible to old API. If you make no changes to your existing code, old icons would be dynamically loaded as `outline`icons.
-But the best practice is always to use `nz-icon` component and specify the `theme` prop.
+Use `nz-icon` component and specify the `theme` property.
 
 ```html
 <nz-icon nzType="star" nzTheme="fill" />
-```
-
-All the icons will be rendered to `<svg>`, and styles and classes applied to `<i>` would work.
-
-```html
-<nz-icon nzType="message" style="font-size: 16px; color: #08c;" />
 ```
 
 ### Static loading and dynamic loading
@@ -98,7 +91,7 @@ would increase your bundle's size so we recommend use dynamic importing as much 
 > official website are loaded dynamically.
 
 **Dynamic importing**. This way would not increase your bundle's size. When NG-ZORRO detects that the icon you want to
-render hasn't been registered, it would fire a HTTP request to load it. All you have to do is to config your
+render hasn't been registered, it would fire an HTTP request to load it. All you have to do is to config your
 `angular.json` like this:
 
 ```json
@@ -114,7 +107,7 @@ render hasn't been registered, it would fire a HTTP request to load it. All you 
 ```
 
 You can call `changeAssetsSource()` of `NzIconService` to change the location of your icon assets, so that you can
-deploy these icon assets to cdn. The parameter you passed would be add in front of `assets/`.
+deploy these icon assets to CDN. The parameter you passed would be added in front of `assets/`.
 
 Let's assume that you deploy static assets under `https://mycdn.somecdn.com/icons/assets`. You can call
 `changeAssetsSource('https://mycdn.somecdn.com/icons')` to tell NG-ZORRO that all your resources are located there.
@@ -147,7 +140,7 @@ Once the QuestionOutline icon get loaded, it would be usable across the applicat
 
 ### Set Default TwoTone Color
 
-When using the two-tone icons, you provide a global configuration like `{ nzIcon: { nzTwotoneColor: 'xxx' } }`via `NzConfigService` or call corresponding `set` method to change to default twotone color.
+When using two-tone icons, you should provide a global configuration like `{ nzIcon: { nzTwotoneColor: 'xxx' } }` via `NzConfigService` or call corresponding `set` method to change to default twotone color.
 
 ### Custom Font Icon
 
@@ -193,7 +186,8 @@ Have you read the docs above?
 
 ### There are two similar icons in a `<span></span>` tag. What happened?
 
-In older versions of NG-ZORRO, there was a font file which would use `:before` to insert a icon according to a `i` tag's `className`. So if you have two icons, try to remove `node_modules` and reinstall. If the problem is still there, search `@icon-url` and remove that line.
+In older versions of NG-ZORRO, there was a font file which would use `:before` to insert an icon according to a `i` tag's `className`.
+So if you have two icons, try to remove `node_modules` and reinstall. If the problem is still there, search `@icon-url` and remove that line.
 
 ### I want to import all icons statically. What should I do?
 
@@ -202,9 +196,7 @@ Although this is not recommended usage, actually we demonstrate it here <a href=
 ```typescript
 import * as AllIcons from '@ant-design/icons-angular/icons';
 
-const antDesignIcons = AllIcons as {
-  [key: string]: IconDefinition;
-};
+const antDesignIcons = AllIcons as Record<string, IconDefinition>;
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 ```
 
@@ -212,6 +204,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
 We used several methods to reduce requests, like static cache, dynamic cache and reusable request. It's basically not noticeable for visitors that icons are loaded asynchronously assuming web connections are fairly good.
 
-### How do I know a icon's corresponding module to import?
+### How do I know an icon's corresponding module to import?
 
 Capital camel-case `type & theme`, i.e. `alibaba` => `AlibabaOutline`.
