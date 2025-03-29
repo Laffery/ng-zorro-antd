@@ -67,11 +67,11 @@ All the icons will be rendered to `<svg>`, and styles and classes applied to `<i
 
 As for icons provided by Ant Design, there are two ways of importing them into your project.
 
-Static loading. By registering icons to `AppModule`, you load icons statically.
+By registering icons to `app.config.ts` with `provideNzIcons` API, you load icons statically.
 
 ```typescript
 import { IconDefinition } from '@ant-design/icons-angular';
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { provideNzIcons } from 'ng-zorro-antd/icon';
 
 // Import what you need. RECOMMENDED. ✔️
 import { AccountBookFill, AlertFill, AlertOutline } from '@ant-design/icons-angular/icons';
@@ -85,19 +85,6 @@ const icons: IconDefinition[] = [AccountBookFill, AlertOutline, AlertFill];
 //   [key: string]: IconDefinition;
 // };
 // const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [NzIconModule.forRoot(icons)],
-  bootstrap: [AppComponent]
-})
-export class AppModule {}
-```
-
-For standalone mode, you can register icons in `app.config.ts` with `provideNzIcons` API:
-
-```typescript
-import { provideNzIcons } from 'ng-zorro-antd/icon';
 
 export const appConfig = {
   providers: [provideNzIcons(icons)]
@@ -134,17 +121,17 @@ Let's assume that you deploy static assets under `https://mycdn.somecdn.com/icon
 
 Please call this in component's constructor or `AppInitService`.
 
-### Add Icons in Lazy-loaded Modules
+### Add Icons in Lazy-loaded Components
 
-Sometimes, you want to import icons in lazy modules to avoid increasing the size of the main.js. You can use `NzIconModule.forChild`.
+Sometimes, you want to import icons in lazy components to avoid increasing the size of the main.js. You can use `NzIconModule.forChild`.
 
 ```typescript
-import { NzIconModule } from 'ng-zorro-antd/icon';
+import { provideNzIconsPatch } from 'ng-zorro-antd/icon';
 
-@NgModule({
-  imports: [NzIconModule.forChild([QuestionOutline])]
+@Component({
+  providers: [provideNzIconsPatch([QuestionOutline])]
 })
-class ChildModule {}
+class ChildComponent {}
 ```
 
 When `ChildModule` get loaded, the icon QuestionOutline would be usable across the application.

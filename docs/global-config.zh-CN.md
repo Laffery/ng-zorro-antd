@@ -18,17 +18,11 @@ const ngZorroConfig: NzConfig = {
   notification: { nzTop: 240 }
 };
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    CommonModule
-  ],
+export const appConfig = {
   providers: [
     provideNzConfig(ngZorroConfig)
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule {}
+  ]
+}
 ```
 
 这些全局配置项将会被注入 `NzConfigService` 当中并保存。
@@ -41,10 +35,10 @@ export class AppModule {}
 
 ```typescript
 export class AppComponent implements OnInit {
+  private nzConfigService = inject(NzConfigService);
+
   @ViewChild('nzIndicatorTpl', { static: true })
   nzIndicator!: TemplateRef<void>;
-
-  constructor(private readonly nzConfigService: NzConfigService) {}
 
   ngOnInit(): void {
     this.nzConfigService.set('spin', { nzIndicator: this.nzIndicator });
@@ -84,20 +78,14 @@ const nzConfigFactory = (): NzConfig => {
   };
 };
 
-@NgModule({
-  imports: [...],
-  declarations: [
-    AppComponent,
-    GlobalTemplatesComponent
-  ],
+export const appConfig = {
   providers: [
     { // The FactoryProvider
       provide: NZ_CONFIG,
       useFactory: nzConfigFactory
     }
   ]
-})
-export class AppModule {}
+}
 ```
 
 
@@ -160,11 +148,9 @@ export class AppModule {}
 ```typescript
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 
-@Component({
-  selector: 'app-change-zorro-config'
-})
+@Component({})
 export class ChangeZorroConfigComponent {
-  constructor(private nzConfigService: NzConfigService) {}
+  private nzConfigService = inject(NzConfigService);
 
   onChangeConfig() {
     this.nzConfigService.set('button', { nzSize: 'large' })
