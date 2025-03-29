@@ -116,29 +116,13 @@ export const appConfig: ApplicationConfig = {
 
 ### 在子模块中补充图标
 
-有时候，为了避免增大 main.js 的体积，你可能想要从懒加载模块中引入图标，这时你就可以使用 `NzIconModule.forChild` 来追加图标。
-
-```typescript
-import { provideNzIconsPatch } from 'ng-zorro-antd/icon';
-
-@Component({
-  providers: [provideNzIconsPatch([QuestionOutline])]
-})
-class ChildComponent {}
-```
-
-这样，当 `ChildModule` 加载之后，整个应用都能够使用 QuestionOutline 图标。
-
-当然，不要忘记在 `NZ_ICONS` 中删除该图标。
-
-在 Standalone 模式下，你可以在懒加载的组件中或路由的 `providers` 中使用 `provideNzIconsPatch` 来补充图标：
+有时候，为了避免增大 main.js 的体积，你可能想要懒加载的组件中或路由的 `providers` 中使用 `provideNzIconsPatch` 来补充图标
 
 ```typescript
 import { NzIconModule, provideNzIconsPatch } from 'ng-zorro-antd/icon';
 
 // 在 xxx.component.ts 中
 @Component({
-  standalone: true,
   imports: [NzIconModule],
   providers: [provideNzIconsPatch([QuestionOutline])]
 })
@@ -150,6 +134,10 @@ const routes: Routes = [{
   providers: [provideNzIconsPatch([QuestionOutline])],
 }]
 ```
+
+这样，当 `ChildModule` 加载之后，整个应用都能够使用 QuestionOutline 图标。
+
+当然，不要忘记在 `NZ_ICONS` 中删除该图标。
 
 ### 双色图标主色
 

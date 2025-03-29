@@ -67,7 +67,7 @@ All the icons will be rendered to `<svg>`, and styles and classes applied to `<i
 
 As for icons provided by Ant Design, there are two ways of importing them into your project.
 
-By registering icons to `app.config.ts` with `provideNzIcons` API, you load icons statically.
+**Static loading**. You can load icons statically by registering icons to `app.config.ts` with `provideNzIcons` API.
 
 ```typescript
 import { IconDefinition } from '@ant-design/icons-angular';
@@ -97,7 +97,7 @@ would increase your bundle's size so we recommend use dynamic importing as much 
 > Icons used by `NG-ZORRO` itself are imported statically to increase loading speed. However, icons demonstrated on the
 > official website are loaded dynamically.
 
-Dynamic importing. This way would not increase your bundle's size. When NG-ZORRO detects that the icon you want to
+**Dynamic importing**. This way would not increase your bundle's size. When NG-ZORRO detects that the icon you want to
 render hasn't been registered, it would fire a HTTP request to load it. All you have to do is to config your
 `angular.json` like this:
 
@@ -123,27 +123,14 @@ Please call this in component's constructor or `AppInitService`.
 
 ### Add Icons in Lazy-loaded Components
 
-Sometimes, you want to import icons in lazy components to avoid increasing the size of the main.js. You can use `NzIconModule.forChild`.
-
-```typescript
-import { provideNzIconsPatch } from 'ng-zorro-antd/icon';
-
-@Component({
-  providers: [provideNzIconsPatch([QuestionOutline])]
-})
-class ChildComponent {}
-```
-
-When `ChildModule` get loaded, the icon QuestionOutline would be usable across the application.
-
-For standalone mode, you can import icons in `providers` of the standalone component or router with `provideNzIconsPatch` API.
+Sometimes, you want to import icons in lazy components to avoid increasing the size of the main.js.
+You can import icons in `providers` of the component or router with `provideNzIconsPatch` API.
 
 ```typescript
 import { NzIconModule, provideNzIconsPatch } from 'ng-zorro-antd/icon';
 
 // in xxx.component.ts
 @Component({
-  standalone: true,
   imports: [NzIconModule],
   providers: [provideNzIconsPatch([QuestionOutline])]
 })
@@ -155,6 +142,8 @@ const routes: Routes = [{
   providers: [provideNzIconsPatch([QuestionOutline])],
 }]
 ```
+
+Once the QuestionOutline icon get loaded, it would be usable across the application.
 
 ### Set Default TwoTone Color
 
