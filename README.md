@@ -92,7 +92,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 @Component({
   imports: [ NzButtonModule ]
 })
-export class AppCmomponent {}
+export class AppComponent {}
 ```
 
 > `@angular/cli` users won't have to worry about the things below but it's good to know.
