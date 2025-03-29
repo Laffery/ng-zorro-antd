@@ -21,14 +21,14 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 ### nz-icon, [nz-icon]
 
-| 参数                 | 说明                                    | 类型                           | 默认值         | 支持全局配置 |
-|--------------------|---------------------------------------|------------------------------|-------------|--------|
-| `[nzType]`         | 图标类型，遵循图标的命名规范                        | string                       | -           |
-| `[nzTheme]`        | 图标主题风格。可选实心、描线、双色等主题风格，适用于官方图标        | `'fill'丨'outline'丨'twotone'` | `'outline'` | ✅      |
-| `[nzSpin]`         | 是否有旋转动画                               | `boolean`                    | `false`     |
-| `[nzTwotoneColor]` | 仅适用双色图标，设置双色图标的主要颜色，默认为 Ant Design 蓝色 | `string (十六进制颜色)`            | -           | ✅      |
-| `[nzIconfont]`     | 指定来自 IconFont 的图标类型                   | string                       | -           |
-| `[nzRotate]`       | 图标旋转角度                                | `number`                     | -           |
+| 参数                 | 说明                             | 类型                           | 默认值         | 支持全局配置 |
+|--------------------|--------------------------------|------------------------------|-------------|--------|
+| `[nzType]`         | 图标类型，遵循图标的命名规范                 | string                       | -           | -      |
+| `[nzTheme]`        | 图标主题风格。可选实心、描线、双色等主题风格，适用于官方图标 | `'fill'丨'outline'丨'twotone'` | `'outline'` | ✅      |
+| `[nzSpin]`         | 是否有旋转动画                        | `boolean`                    | `false`     | -      |
+| `[nzTwotoneColor]` | 双色图标的主要颜色，默认为 Ant Design 蓝色    | `string (十六进制颜色)`            | -           | ✅      |
+| `[nzIconfont]`     | 指定来自 IconFont 的图标类型            | string                       | -           | -      |
+| `[nzRotate]`       | 图标旋转角度                         | `number`                     | -           | -      |
 
 ### NzIconService
 
@@ -41,15 +41,15 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 ### SVG 图标
 
-最早 NG-ZORRO 采用基于字体文件的解决方案。
-现在我们与 Ant Design 同步，使用 svg 图标替换了原先的 font 图标，从而带来以下优势：
+最早，NG-ZORRO 采用基于字体文件的解决方案。
+现在，我们与 Ant Design 同步，使用 svg 图标替换了原先的 font 图标，带来以下优势：
 
 - 完全离线化使用，不需要从 CDN 下载字体文件，图标不会因为网络问题呈现方块，同时还支持本地部署。
 - 在低端设备上 SVG 有更好的清晰度。
 - 支持多色图标。
 - 对于内建图标的更换可以提供更多 API，而无需样式覆盖。
 
-你可以使用 `nz-icon` 组件，指定图标 `type` 并传入 `theme` 以明确图标的主题风格，例如：
+你可以使用 `nz-icon` 组件，传入 `theme` 以明确图标的主题风格，例如：
 
 ```html
 <nz-icon nzType="star" nzTheme="fill" />
@@ -81,11 +81,13 @@ export const appConfig: ApplicationConfig = {
 }
 ```
 
-本质上是调用了 `NzIconService` 的 `addIcon` 方法，引入后的文件会被打包到 `.js` 文件中。静态引入会增加包体积，所以我们建议尽可能地使用动态加载，如果要静态加载，也仅仅加载你需要用到的图标。
+本质上是调用了 `NzIconService` 的 `addIcon` 方法，引入后的文件会被打包到 `.js` 文件中。
+静态引入会增加包体积，所以我们建议尽可能地使用动态加载，如果要静态加载，也仅仅加载你需要用到的图标。
 
-> 为了加快渲染速度，NG-ZORRO 本身用到的 icon 是静态引入的。而官网的图标是动态引入的。
+> 为了加快渲染速度，NG-ZORRO 本身用到的 icon 是静态引入的。官网的图标是动态引入的。
 
-**动态加载**，这是为了减少包体积而提供的方式。当 NG-ZORRO 检测用户想要渲染的图标还没有静态引入时，会发起 HTTP 请求动态引入。你只需要配置 `angular.json` 文件：
+**动态加载**，这是为了减少包体积而提供的方式。当 NG-ZORRO 检测用户想要渲染的图标还没有静态引入时，会发起 HTTP 请求动态引入。
+你只需要配置 `angular.json` 文件：
 
 ```json
 {
@@ -101,13 +103,13 @@ export const appConfig: ApplicationConfig = {
 
 你可以通过 `NzIconService` 的 `changeAssetsSource()` 方法来修改图标资源的位置，这样你就可以部署这些资源到 CDN 上。你的参数会被直接添加到 `assets/` 的前面。
 
-例如，你在 `https://mycdn.somecdn.com/icons/assets` 目录下部署了静态资源文件，那么你就可以通过调用 `changeAssetsSource('https://mycdn.somecdn.com/icons')`，来告诉 NG-ZORRO 从这个位置动态加载图标资源。
+例如，你在 `https://mycdn.somecdn.com/icons/assets` 目录下部署了静态资源文件，则可以通过调用 `changeAssetsSource('https://mycdn.somecdn.com/icons')`，来告诉 NG-ZORRO 从这个位置动态加载图标资源。
 
-请在 constructor 里或者在 `AppInitService` 里调用这个方法。
+请在构造函数或 `AppInitService` 里调用该方法。
 
 ### 在子模块中补充图标
 
-有时候，为了避免增大 main.js 的体积，你可能想要在懒加载的组件中或路由的 `providers` 中使用 `provideNzIconsPatch` 来补充图标
+有时候，为了避免增大 `main.js` 的体积，你可能想要在懒加载的组件中或路由的 `providers` 中使用 `provideNzIconsPatch` 来补充图标
 
 ```typescript
 import { NzIconModule, provideNzIconsPatch } from 'ng-zorro-antd/icon';
