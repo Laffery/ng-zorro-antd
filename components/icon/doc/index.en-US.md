@@ -10,7 +10,7 @@ Semantic vector graphics.
 
 ## List of icons
 
-We are still adding icons right now, syncing to [antd](https://ant.design/components/icon/).
+We are keep syncing to [antd](https://ant.design/components/icon/) now.
 
 ```typescript
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -31,7 +31,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 ### NzIconService
 
-| Methods/Properties     | Description                                                                                      | Parameters               |
+| Methods                | Description                                                                                      | Parameters               |
 |------------------------|--------------------------------------------------------------------------------------------------|--------------------------|
 | `addIcon()`            | To import icons statically                                                                       | `IconDefinition`         |
 | `addIconLiteral()`     | To statically import custom icons                                                                | `string`, `string (SVG)` |
@@ -47,8 +47,6 @@ We synced to Ant Design and replaced font icons with svg icons which bring benef
 - Much more display accuracy in lower-level screens.
 - Support multiple colors for icon.
 - No need to change built-in icons with overriding styles by providing more props in component.
-
-You can join in [this discussion of Ant Design](https://github.com/ant-design/ant-design/issues/10353).
 
 Use `nz-icon` component and specify the `theme` property.
 

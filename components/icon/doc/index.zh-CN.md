@@ -32,7 +32,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 
 ### NzIconService
 
-| 方法/属性                  | 说明                                              | 参数                       |
+| 方法                     | 说明                                              | 参数                       |
 |------------------------|-------------------------------------------------|--------------------------|
 | `addIcon()`            | 用于静态引入图标，可传入多个值（或者用数组解构赋值）                      | `IconDefinition`         |
 | `addIconLiteral()`     | 用于静态引入用户自定义图标                                   | `string`, `string (SVG)` |
@@ -158,7 +158,7 @@ this._iconService.fetchFromIconfont({
 
 在 scriptUrl 都设置有效的情况下，组件在渲染前会自动引入 [iconfont.cn](http://iconfont.cn/) 项目中的图标符号集，无需手动引入。
 
-见 [iconfont.cn](http://iconfont.cn/help/detail?spm=a313x.7781069.1998910419.15&helptype=code) 使用帮助 查看如何生成 js 地址。
+见 [iconfont.cn 使用帮助](http://iconfont.cn/help/detail?spm=a313x.7781069.1998910419.15&helptype=code) 查看如何生成 js 地址。
 
 ### 命名空间
 
