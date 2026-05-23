@@ -21,6 +21,7 @@ export interface NzMessageDataOptions {
   nzData?: NzSafeAny;
   nzStyle?: NgStyleInterface | string;
   nzClass?: NgClassInterface | string;
+  nzKey?: string;
 }
 
 export interface NzMessageData {

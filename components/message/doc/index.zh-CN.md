@@ -39,6 +39,7 @@ description: 全局展示操作反馈信息。
 | nzData         | 传递给自定义模板的数据            | `NzSafeAny`                  |        |
 | nzStyle        | 自定义内联样式                    | `NgStyleInterface \| string` | 20.4.0 |
 | nzClass        | 自定义 CSS class                  | `NgClassInterface \| string` | 20.4.0 |
+| nzKey          | 消息的唯一标识符                  | `string`                     |        |
 
 还提供了全局销毁方法：
 

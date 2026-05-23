@@ -18,7 +18,9 @@ import {
   EventEmitter,
   inject,
   Injector,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   Signal
 } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -166,7 +168,7 @@ export abstract class NzMNContainerComponent<
 }
 
 @Directive()
-export abstract class NzMNComponent implements OnInit {
+export abstract class NzMNComponent implements OnChanges, OnInit {
   abstract instance: Required<NzMessageData>;
   abstract index?: number;
   abstract destroyed: EventEmitter<{ id: string; userAction: boolean }>;
@@ -196,6 +198,7 @@ export abstract class NzMNComponent implements OnInit {
   protected eraseTimer?: ReturnType<typeof setTimeout>;
   protected eraseTimingStart?: number;
   protected eraseTTL!: number;
+  private initialized = false;
 
   constructor() {
     this.destroyRef.onDestroy(() => {
@@ -206,12 +209,32 @@ export abstract class NzMNComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.options = this.instance.options as Required<NzMessageDataOptions>;
+    this.initialized = true;
+    this.updateOptions();
 
     if (this.options.nzAnimate) {
       // todo: remove this line in v22.0.0
       this.instance.state = 'enter';
       this._startEnterAnimation();
+    }
+
+    this.initAutoClose();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.initialized && changes['instance']) {
+      this.updateOptions();
+      this.initAutoClose();
+    }
+  }
+
+  private updateOptions(): void {
+    this.options = this.instance.options as Required<NzMessageDataOptions>;
+  }
+
+  private initAutoClose(): void {
+    if (this.autoClose) {
+      this.clearEraseTimeout();
     }
 
     this.autoClose = this.options.nzDuration > 0;

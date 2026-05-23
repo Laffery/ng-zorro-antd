@@ -11,6 +11,7 @@ import { toCssPixel } from 'ng-zorro-antd/core/util';
 
 import { NzMNContainerComponent } from './base';
 import { NzMessageComponent } from './message.component';
+import { NzMessageData } from './typings';
 
 const NZ_CONFIG_COMPONENT_NAME = 'message';
 
@@ -30,7 +31,7 @@ const NZ_MESSAGE_DEFAULT_CONFIG: Required<MessageConfig> = {
   exportAs: 'nzMessageContainer',
   template: `
     <div class="ant-message" [class.ant-message-rtl]="dir === 'rtl'" [style.top]="top">
-      @for (instance of instances; track instance) {
+      @for (instance of instances; track instance.messageId) {
         <nz-message [instance]="instance" (destroyed)="remove($event.id, $event.userAction)" />
       }
     </div>
@@ -44,6 +45,26 @@ export class NzMessageContainerComponent extends NzMNContainerComponent {
   constructor() {
     super();
     this.updateConfig();
+  }
+
+  override create(message: NzMessageData): Required<NzMessageData> {
+    const instance = this.onCreate(message);
+    const key = instance.options.nzKey;
+    const messageWithSameKey = this.instances.find(msg => msg.options.nzKey === key);
+
+    if (key && messageWithSameKey) {
+      this.replaceMessage(messageWithSameKey, instance);
+    } else {
+      if (this.instances.length >= this.config!.nzMaxStack!) {
+        this.instances = this.instances.slice(1);
+      }
+
+      this.instances = [...this.instances, instance];
+    }
+
+    this.readyInstances();
+
+    return instance;
   }
 
   protected subscribeConfigChange(): void {
@@ -62,5 +83,10 @@ export class NzMessageContainerComponent extends NzMNContainerComponent {
 
     this.top = toCssPixel(this.config.nzTop);
     this.cdr.markForCheck();
+  }
+
+  private replaceMessage(old: Required<NzMessageData>, _new: Required<NzMessageData>): void {
+    const index = this.instances.indexOf(old);
+    this.instances = [...this.instances.slice(0, index), _new, ...this.instances.slice(index + 1)];
   }
 }

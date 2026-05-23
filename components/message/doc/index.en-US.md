@@ -39,6 +39,7 @@ The parameters that are set by the `options` support are as follows:
 | nzData         | Data to pass to custom template                                        | `NzSafeAny`                  |         |
 | nzStyle        | Customized inline style                                                | `NgStyleInterface \| string` | 20.4.0  |
 | nzClass        | Customized CSS class                                                   | `NgClassInterface \| string` | 20.4.0  |
+| nzKey          | The unique identifier of the message                                   | `string`                     |         |
 
 Methods for destruction are also provided:
 

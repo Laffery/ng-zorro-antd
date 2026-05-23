@@ -101,6 +101,36 @@ describe('message', () => {
     expect(overlayContainerElement.textContent).toContain('Content in template from template');
   });
 
+  it('should update an existing message with template ref when change nzData', async () => {
+    messageService.info(testComponent.template, { nzData: 'oldData', nzKey: 'exists' });
+    overlayContainerElement = overlayContainer.getContainerElement();
+    expect(overlayContainerElement.textContent).toContain('Content in template oldData');
+
+    messageService.info(testComponent.template, { nzData: 'newData', nzKey: 'exists' });
+    await fixture.whenStable();
+    expect(overlayContainerElement.textContent).toContain('Content in template newData');
+  });
+
+  it('should update an existing message when keys are matched', async () => {
+    let messageId: string | null;
+    messageId = messageService.loading('EXISTS', { nzDuration: 0, nzKey: 'exists' }).messageId;
+    overlayContainerElement = overlayContainer.getContainerElement();
+    expect(overlayContainerElement.textContent).toContain('EXISTS');
+    expect(messageId).toEqual('exists');
+
+    messageId = messageService.success('SHOULD CHANGE', { nzKey: 'exists', nzDuration: 1000 }).messageId;
+    await fixture.whenStable();
+    expect(messageId).toEqual('exists');
+    expect(messageService['container']?.instances.length).toBe(1);
+    expect(overlayContainerElement.textContent).not.toContain('EXISTS');
+    expect(overlayContainerElement.textContent).toContain('SHOULD CHANGE');
+    expect(overlayContainerElement.querySelector('.anticon-check-circle')).not.toBeNull();
+
+    await sleep(1000);
+    await animationEnd();
+    expect(overlayContainerElement.textContent).not.toContain('SHOULD CHANGE');
+  });
+
   it('should auto closed by 1s', async () => {
     messageService.create('', 'EXISTS', { nzDuration: 1000 });
     overlayContainerElement = overlayContainer.getContainerElement();

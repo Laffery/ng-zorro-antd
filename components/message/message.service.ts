@@ -46,7 +46,7 @@ export class NzMessageService extends NzMNService<NzMessageContainerComponent> {
       ...message,
       ...{
         createdAt: new Date(),
-        messageId: this.getInstanceId(),
+        messageId: options?.nzKey || this.getInstanceId(),
         options
       }
     });
