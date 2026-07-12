@@ -24,15 +24,30 @@ import { DateBodyRow, DateCell } from './interface';
 
 @Directive()
 export abstract class AbstractTable implements OnInit, OnChanges {
+  private _value!: CandyDate;
+  private _activeDate: CandyDate = new CandyDate();
+
   headRow: DateCell[] = [];
   bodyRows: DateBodyRow[] = [];
   MAX_ROW = 6;
   MAX_COL = 7;
 
   @Input() prefixCls: string = 'ant-picker';
-  @Input() value!: CandyDate;
+  @Input()
+  set value(value: CandyDate | Date) {
+    this._value = this.toCandyDate(value);
+  }
+  get value(): CandyDate {
+    return this._value;
+  }
   @Input() locale!: NzCalendarI18nInterface;
-  @Input() activeDate: CandyDate = new CandyDate();
+  @Input()
+  set activeDate(value: CandyDate | Date) {
+    this._activeDate = this.toCandyDate(value);
+  }
+  get activeDate(): CandyDate {
+    return this._activeDate;
+  }
   @Input({ transform: booleanAttribute }) showWeek: boolean = false;
   @Input() selectedValue: CandyDate[] = []; // Range ONLY
   @Input() hoverValue: CandyDate[] = []; // Range ONLY
@@ -42,6 +57,7 @@ export abstract class AbstractTable implements OnInit, OnChanges {
   @Input({ transform: booleanAttribute }) canSelectWeek: boolean = false;
 
   @Output() readonly valueChange = new EventEmitter<CandyDate>();
+  @Output() readonly dateValueChange = new EventEmitter<Date>();
   @Output() readonly cellHover = new EventEmitter<CandyDate>(); // Emitted when hover on a day by mouse enter
 
   protected render(): void {
@@ -104,8 +120,8 @@ export abstract class AbstractTable implements OnInit, OnChanges {
 
   private isDateRealChange(change: SimpleChange): boolean {
     if (change) {
-      const previousValue: CandyDate | CandyDate[] = change.previousValue;
-      const currentValue: CandyDate | CandyDate[] = change.currentValue;
+      const previousValue: CandyDate | Date | CandyDate[] = change.previousValue;
+      const currentValue: CandyDate | Date | CandyDate[] = change.currentValue;
       if (Array.isArray(currentValue)) {
         return (
           !Array.isArray(previousValue) ||
@@ -118,13 +134,17 @@ export abstract class AbstractTable implements OnInit, OnChanges {
           })
         );
       } else {
-        return !this.isSameDate(previousValue as CandyDate, currentValue);
+        return !this.isSameDate(this.toCandyDate(previousValue as CandyDate | Date), this.toCandyDate(currentValue));
       }
     }
     return false;
   }
 
-  private isSameDate(left: CandyDate, right: CandyDate): boolean {
-    return (!left && !right) || (left && right && right.isSameDay(left));
+  private isSameDate(left: CandyDate | null, right: CandyDate | null): boolean {
+    return (!left && !right) || !!(left && right && right.isSameDay(left));
+  }
+
+  private toCandyDate(value: CandyDate | Date | null | undefined): CandyDate {
+    return value instanceof CandyDate ? value : new CandyDate(value || undefined);
   }
 }

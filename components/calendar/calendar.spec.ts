@@ -14,7 +14,7 @@ import { vi } from 'vitest';
 
 import { provideNzNoAnimation } from 'ng-zorro-antd/core/animation';
 import { testDirectionality } from 'ng-zorro-antd/core/testing';
-import { CandyDate, provideNzDateFnsAdapter } from 'ng-zorro-antd/core/time';
+import { provideNzDateFnsAdapter } from 'ng-zorro-antd/core/time';
 
 import { NzCalendarHeaderComponent as CalendarHeader } from './calendar-header.component';
 import { NzCalendarComponent as Calendar, NzCalendarMode } from './calendar.component';
@@ -108,7 +108,7 @@ describe('calendar', () => {
       const host = fixture.debugElement.queryAll(By.directive(Calendar))[0];
       const header = host.query(By.directive(CalendarHeader)).injector.get(CalendarHeader);
 
-      expect(header.activeDate.getYear()).toBe(now.getFullYear());
+      expect(header.activeDate.getFullYear()).toBe(now.getFullYear());
       expect(header.activeDate.getMonth()).toBe(now.getMonth());
       expect(header.activeDate.getDate()).toBe(now.getDate());
     });
@@ -119,9 +119,9 @@ describe('calendar', () => {
 
       const calendar = fixture.debugElement.queryAll(By.directive(Calendar))[1].injector.get(Calendar);
 
-      expect(calendar.activeDate.nativeDate).toBe(component.date0);
+      expect(calendar.activeDate).toBe(component.date0);
 
-      calendar.onDateSelect(new CandyDate(now));
+      calendar.onDateSelect(now);
       fixture.detectChanges();
 
       expect(component.date0).toBe(now);
@@ -138,7 +138,7 @@ describe('calendar', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(calendar.activeDate.nativeDate).toBe(component.date1);
+      expect(calendar.activeDate).toBe(component.date1);
 
       model.viewToModelUpdate(now);
       fixture.detectChanges();

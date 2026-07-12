@@ -31,6 +31,7 @@ export class DateTableComponent extends AbstractTable implements OnChanges, OnIn
     // Only change date, does not change time
     this.activeDate = this.activeDate.setYear(value.getYear()).setMonth(value.getMonth()).setDate(value.getDate());
     this.valueChange.emit(this.activeDate);
+    this.dateValueChange.emit(this.activeDate.nativeDate);
 
     if (!this.activeDate.isSameMonth(this.value)) {
       this.render();

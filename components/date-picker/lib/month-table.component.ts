@@ -119,5 +119,6 @@ export class MonthTableComponent extends AbstractTable implements OnChanges, OnI
   private chooseMonth(month: number): void {
     this.value = this.activeDate.setMonth(month);
     this.valueChange.emit(this.value);
+    this.dateValueChange.emit(this.value.nativeDate);
   }
 }

@@ -14,7 +14,7 @@ import { zhCN } from 'date-fns/locale';
 
 import { provideNzNoAnimation } from 'ng-zorro-antd/core/animation';
 import { updateNonSignalsInput } from 'ng-zorro-antd/core/testing';
-import { CandyDate, NzDateAdapter } from 'ng-zorro-antd/core/time';
+import { NzDateAdapter } from 'ng-zorro-antd/core/time';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 
 import { NzCalendarHeaderComponent, NzCalendarHeaderComponent as CalendarHeader } from './calendar-header.component';
@@ -257,7 +257,7 @@ class NzTestCalendarHeaderFullscreenComponent {
   `
 })
 class NzTestCalendarHeaderActiveDateComponent {
-  activeDate = new CandyDate(new Date(2001, 1, 3));
+  activeDate = new Date(2001, 1, 3);
 }
 
 @Component({

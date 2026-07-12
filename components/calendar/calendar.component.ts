@@ -22,7 +22,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { CandyDate } from 'ng-zorro-antd/core/time';
+import { NzDateAdapter } from 'ng-zorro-antd/core/time';
 import { LibPackerModule } from 'ng-zorro-antd/date-picker';
 import { NzCalendarI18nInterface, NzI18nService } from 'ng-zorro-antd/i18n';
 
@@ -66,7 +66,7 @@ type NzCalendarDateTemplate = TemplateRef<{ $implicit: Date }>;
               [cellRender]="$any(dateCell)"
               [fullCellRender]="$any(dateFullCell)"
               [disabledDate]="nzDisabledDate"
-              (valueChange)="onDateSelect($event)"
+              (dateValueChange)="onDateSelect($event)"
             />
           } @else {
             <month-table
@@ -76,7 +76,7 @@ type NzCalendarDateTemplate = TemplateRef<{ $implicit: Date }>;
               [locale]="locale"
               [cellRender]="$any(monthCell)"
               [fullCellRender]="$any(monthFullCell)"
-              (valueChange)="onDateSelect($event)"
+              (dateValueChange)="onDateSelect($event)"
             />
           }
         </div>
@@ -94,10 +94,11 @@ type NzCalendarDateTemplate = TemplateRef<{ $implicit: Date }>;
 export class NzCalendarComponent implements ControlValueAccessor, OnChanges {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly i18n = inject(NzI18nService);
+  private readonly dateAdapter = inject<NzDateAdapter<Date>>(NzDateAdapter);
   protected readonly dir = inject(Directionality).valueSignal;
 
   locale!: NzCalendarI18nInterface;
-  activeDate = new CandyDate();
+  activeDate = this.dateAdapter.today();
   prefixCls = 'ant-picker-calendar';
 
   private onChangeFn: (date: Date) => void = () => {};
@@ -156,27 +157,27 @@ export class NzCalendarComponent implements ControlValueAccessor, OnChanges {
 
   onModeChange(mode: NzCalendarMode): void {
     this.nzModeChange.emit(mode);
-    this.nzPanelChange.emit({ date: this.activeDate.nativeDate, mode });
+    this.nzPanelChange.emit({ date: this.activeDate, mode });
   }
 
   onYearSelect(year: number): void {
-    const date = this.activeDate.setYear(year);
+    const date = this.dateAdapter.setYear(this.activeDate, year);
     this.updateDate(date);
   }
 
   onMonthSelect(month: number): void {
-    const date = this.activeDate.setMonth(month);
+    const date = this.dateAdapter.setMonth(this.activeDate, month);
     this.updateDate(date);
   }
 
-  onDateSelect(date: CandyDate): void {
+  onDateSelect(date: Date): void {
     // Only activeDate is enough in calendar
     // this.value = date;
     this.updateDate(date);
   }
 
   writeValue(value: Date | null): void {
-    this.updateDate(new CandyDate(value as Date), false);
+    this.updateDate(value || this.dateAdapter.today(), false);
   }
 
   registerOnChange(fn: (date: Date) => void): void {
@@ -187,14 +188,14 @@ export class NzCalendarComponent implements ControlValueAccessor, OnChanges {
     this.onTouchFn = fn;
   }
 
-  private updateDate(date: CandyDate, touched: boolean = true): void {
+  private updateDate(date: Date, touched: boolean = true): void {
     this.activeDate = date;
 
     if (touched) {
-      this.onChangeFn(date.nativeDate);
+      this.onChangeFn(date);
       this.onTouchFn();
-      this.nzSelectChange.emit(date.nativeDate);
-      this.nzValueChange.emit(date.nativeDate);
+      this.nzSelectChange.emit(date);
+      this.nzValueChange.emit(date);
     }
 
     this.cdr.markForCheck();
@@ -202,7 +203,7 @@ export class NzCalendarComponent implements ControlValueAccessor, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.nzValue) {
-      this.updateDate(new CandyDate(this.nzValue), false);
+      this.updateDate(this.nzValue || this.dateAdapter.today(), false);
     }
   }
 }

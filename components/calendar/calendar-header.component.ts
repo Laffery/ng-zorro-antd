@@ -20,7 +20,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 
 import { NzStringTemplateOutletDirective } from 'ng-zorro-antd/core/outlet';
-import { CandyDate, NzDateAdapter } from 'ng-zorro-antd/core/time';
+import { NzDateAdapter } from 'ng-zorro-antd/core/time';
 import { NzI18nPipe } from 'ng-zorro-antd/i18n';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule, NzSelectSizeType } from 'ng-zorro-antd/select';
@@ -79,11 +79,11 @@ import { NzSelectModule, NzSelectSizeType } from 'ng-zorro-antd/select';
   }
 })
 export class NzCalendarHeaderComponent implements OnInit, OnChanges {
-  private readonly dateAdapter = inject(NzDateAdapter);
+  private readonly dateAdapter = inject<NzDateAdapter<Date>>(NzDateAdapter);
 
   @Input() mode: 'month' | 'year' = 'month';
   @Input({ transform: booleanAttribute }) fullscreen: boolean = true;
-  @Input() activeDate = new CandyDate();
+  @Input() activeDate = this.dateAdapter.today();
   @Input() nzCustomHeader?: string | TemplateRef<void>;
 
   @Output() readonly modeChange = new EventEmitter<'month' | 'year'>();
@@ -96,11 +96,11 @@ export class NzCalendarHeaderComponent implements OnInit, OnChanges {
   months: Array<{ label: string; value: number }> = [];
 
   get activeYear(): number {
-    return this.activeDate.getYear();
+    return this.dateAdapter.getYear(this.activeDate);
   }
 
   get activeMonth(): number {
-    return this.activeDate.getMonth();
+    return this.dateAdapter.getMonth(this.activeDate);
   }
 
   get size(): NzSelectSizeType {
@@ -122,7 +122,10 @@ export class NzCalendarHeaderComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const { activeDate } = changes;
     if (activeDate) {
-      if (activeDate.previousValue?.getYear() !== activeDate.currentValue?.getYear()) {
+      if (
+        !activeDate.previousValue ||
+        this.dateAdapter.getYear(activeDate.previousValue) !== this.dateAdapter.getYear(activeDate.currentValue)
+      ) {
         this.setUpYears();
       }
     }
@@ -147,8 +150,8 @@ export class NzCalendarHeaderComponent implements OnInit, OnChanges {
     this.months = [];
 
     for (let i = 0; i < 12; i++) {
-      const dateInMonth = this.activeDate.setMonth(i);
-      const monthText = this.dateAdapter.format(dateInMonth.nativeDate, 'MMM');
+      const dateInMonth = this.dateAdapter.setMonth(this.activeDate, i);
+      const monthText = this.dateAdapter.format(dateInMonth, 'MMM');
       this.months.push({ label: monthText, value: i });
     }
   }
